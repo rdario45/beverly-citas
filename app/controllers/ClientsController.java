@@ -19,6 +19,10 @@ public class ClientsController extends Controller {
      */
     public Result index() {
 
+        ClientsService clientsService = new ClientsService();
+
+        clientsService.consultarTodos();
+
         return ok();
     }
 
