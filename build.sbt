@@ -12,3 +12,4 @@ libraryDependencies += jdbc
 libraryDependencies += javaJdbc
 libraryDependencies += evolutions
 libraryDependencies += "mysql" % "mysql-connector-java" % "5.1.41"
+libraryDependencies += "org.jdbi" % "jdbi" % "2.78"

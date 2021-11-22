@@ -1,29 +1,38 @@
 package controllers;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.google.inject.Inject;
+import domain.Client;
+import play.libs.Json;
+import play.mvc.BodyParser;
 import play.mvc.Controller;
+import play.mvc.Http;
 import play.mvc.Result;
+import service.ClientsService;
 
-import java.util.Arrays;
+import java.util.List;
 
-/**
- * This controller contains an action to handle HTTP requests
- * to the application's home page.
- */
 public class ClientsController extends Controller {
 
-    /**
-     * An action that renders an HTML page with a welcome message.
-     * The configuration in the <code>routes</code> file means that
-     * this method will be called when the application receives a
-     * <code>GET</code> request with a path of <code>/</code>.
-     */
+    private ClientsService clientsService;
+
+    @Inject
+    public ClientsController(ClientsService clientsService) {
+        this.clientsService = clientsService;
+    }
+
     public Result index() {
+        List<Client> allClients = clientsService.consultarTodos();
+        return ok(Json.toJson(allClients));
+    }
 
-        ClientsService clientsService = new ClientsService();
-
-        clientsService.consultarTodos();
-
-        return ok();
+    @BodyParser.Of(BodyParser.Json.class)
+    public Result save(Http.Request request) {
+        JsonNode json = request.body().asJson();
+        Client client = Json.fromJson(json, Client.class);
+        client.setStatus("ACTIVE");
+        clientsService.registrarCliente(client);
+        return ok(Json.toJson(client));
     }
 
 }
