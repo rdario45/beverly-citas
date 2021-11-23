@@ -42,8 +42,5 @@ public interface ClientDAO {
             "discount = :r.discount " +
             "WHERE id = :r.id")
     void update(@BindBean("r") Client record);
-//
-//    @SqlQuery("DELETE FROM events WHERE id = :id  RETURNING *")
-//    Client delete(@Bind("id") int id);
 
 }
