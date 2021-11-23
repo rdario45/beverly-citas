@@ -30,7 +30,6 @@ public class ClientsController extends Controller {
     public Result save(Http.Request request) {
         JsonNode json = request.body().asJson();
         Client client = Json.fromJson(json, Client.class);
-        client.setStatus("ACTIVE");
         clientsService.registrarCliente(client);
         return ok(Json.toJson(client));
     }

@@ -9,3 +9,4 @@ target
 /RUNNING_PID
 app/.DS_Store
 .DS_Store
+bin/

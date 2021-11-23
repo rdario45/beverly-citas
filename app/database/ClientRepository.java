@@ -8,7 +8,6 @@ import play.api.db.Database;
 
 import java.util.List;
 
-
 public class ClientRepository {
 
   private DBI db;
@@ -37,9 +36,5 @@ public class ClientRepository {
   public void update(Client client){
     db.onDemand(ClientDAO.class).update(client);
   }
-//
-//  public Future<Option<Event>> delete(int id){
-//    return Future.of(() -> Option.of(db.onDemand(EventDAO.class).delete(id)).map(EventMapper::recordToEvent));
-//  }
 
 }

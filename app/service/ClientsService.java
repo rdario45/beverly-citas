@@ -21,16 +21,25 @@ public class ClientsService {
     }
 
     public void registrarCliente(Client client) {
+        client.setStatus("ACTIVE");
         repository.save(client);
         calcDiscounts(client);
     }
 
+    private List<Client> getAllReferred(Client client) {
+        return repository.getAllReferred(client.getId());
+    }
+
+    private Client consultarClient(Integer id) {
+        return repository.find(id);
+    }
+
     private void calcDiscounts(Client client) {
         if (client.getReferred() != 0 ) {
-            Client parent = consultarCliente(client.getReferred());
+            Client parent = consultarClient(client.getReferred());
             CompletableFuture.runAsync(()-> {
                 double discount = calcDiscount(0, parent);
-                System.out.println("discount:" + discount);
+                System.out.println("discount::id:"+parent.getId()+":discount:"+discount);
                 parent.setDiscount(discount);
                 repository.update(parent);
             });
@@ -40,22 +49,15 @@ public class ClientsService {
 
     private double calcDiscount(Integer level, Client client) {
         if ( level < 4) { // max 3
-            System.out.println("calc:level: "+level+" calc:id: " + client.getId() + " calc:name: " + client.getName());
+            System.out.println("calc_disc::id:"+client.getId()+":level:"+level+":name:"+client.getName());
             List<Client> referidos = getAllReferred(client);
             if ( referidos.size() > 2 ) { // min 3
                 return 0.05 + referidos.stream()
-                    .map(c -> calcDiscount(level + 1, c))
-                    .reduce(Double::sum).get();
+                        .map(c -> calcDiscount(level + 1, c))
+                        .reduce(Double::sum).get();
             }
         }
         return 0.0;
     }
 
-    private List<Client> getAllReferred(Client client) {
-        return repository.getAllReferred(client.getId());
-    }
-
-    private Client consultarCliente(Integer id) {
-        return repository.find(id);
-    }
 }
