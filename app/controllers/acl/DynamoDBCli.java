@@ -7,9 +7,12 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
-public class DynamoAuthCli {
+public class DynamoDBCli {
 
-    public static Optional<Map<String, AttributeValue>> getDynamoDBItem(DynamoDbClient ddb, String tableName, String key, String keyVal) {
+    public static Optional<Map<String, AttributeValue>> getDynamoDBItem(DynamoDbClient ddb,
+                                                                        String tableName,
+                                                                        String key,
+                                                                        String keyVal) {
 
         HashMap<String,AttributeValue> keyToGet = new HashMap<>();
 

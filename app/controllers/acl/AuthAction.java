@@ -31,14 +31,14 @@ public class AuthAction extends Action.Simple {
 
         Optional<String> access_token = req.queryString("access_token");
         if (access_token.isPresent()) {
-            Optional<Map<String, AttributeValue>> dynamoItem = DynamoAuthCli.getDynamoDBItem(ddb, "sessions", "access_token", access_token.get());
+            Optional<Map<String, AttributeValue>> dynamoItem = DynamoDBCli.getDynamoDBItem(ddb, "sessions", "access_token", access_token.get());
 
             if( dynamoItem.isPresent() ) {
                 Session session = new Session(dynamoItem.get());
                 long lastRefresh = Long.parseLong(session.lastRefresh);
                 long currentMillis = System.currentTimeMillis();
                 if (currentMillis - lastRefresh < DAY_IN_MILLIS) {
-                    DynamoAuthCli.putItemInTable(ddb, "sessions", "access_token", session.accessToken, "last_refresh", String.valueOf(currentMillis));
+                    DynamoDBCli.putItemInTable(ddb, "sessions", "access_token", session.accessToken, "last_refresh", String.valueOf(currentMillis));
                     System.out.println("Authorized");
                     return delegate.call(req);
                 }
