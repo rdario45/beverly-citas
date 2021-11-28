@@ -1,7 +1,7 @@
 package database;
 
 import com.google.inject.Inject;
-import database.sql.ClientDAO;
+import database.sql.ClientSQL;
 import domain.Client;
 import org.skife.jdbi.v2.DBI;
 import play.api.db.Database;
@@ -18,23 +18,23 @@ public class ClientRepository {
   }
 
   public List<Client> listAll() {
-    return db.onDemand(ClientDAO.class).listAll();
+    return db.onDemand(ClientSQL.class).listAll();
   }
 
   public Client find(Integer id) {
-    return db.onDemand(ClientDAO.class).find(id);
+    return db.onDemand(ClientSQL.class).find(id);
   }
 
-  public void save(Client client) {
-    db.onDemand(ClientDAO.class).insert(client);
+  public Client save(Client client) {
+    return db.onDemand(ClientSQL.class).insert(client);
   }
 
   public List<Client> getAllReferred(Integer clientId) {
-    return db.onDemand(ClientDAO.class).getAllReferred(clientId);
+    return db.onDemand(ClientSQL.class).getAllReferred(clientId);
   }
 
   public void update(Client client){
-    db.onDemand(ClientDAO.class).update(client);
+    db.onDemand(ClientSQL.class).update(client);
   }
 
 }

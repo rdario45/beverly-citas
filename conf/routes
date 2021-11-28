@@ -3,7 +3,7 @@
 # ~~~~
 
 # An example controller showing a sample home page
-GET     /clients                    controllers.ClientsController.index()
+GET     /clients                    controllers.ClientsController.index(request: Request)
 +nocsrf
 POST    /clients                    controllers.ClientsController.save(request: Request)
 

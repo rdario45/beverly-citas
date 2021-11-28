@@ -6,13 +6,13 @@ public class Client{
     private String name;
     private String address;
     private String telephone;
-    private Integer referred;
+    private int referred;
     private double discount;
     private String status;
 
     public Client() {}
 
-    public Client(Integer id, String name, String address, String telephone, Integer referred, double discount, String status) {
+    public Client(Integer id, String name, String address, String telephone, int referred, double discount, String status) {
         this.id = id;
         this.name = name;
         this.address = address;
@@ -54,11 +54,11 @@ public class Client{
         this.telephone = telephone;
     }
 
-    public Integer getReferred() {
+    public int getReferred() {
         return referred;
     }
 
-    public void setReferred(Integer referred) {
+    public void setReferred(int referred) {
         this.referred = referred;
     }
 

@@ -20,10 +20,11 @@ public class ClientsService {
         return repository.listAll();
     }
 
-    public void registrarCliente(Client client) {
+    public Client registrarCliente(Client client) {
         client.setStatus("ACTIVE");
-        repository.save(client);
-        calcDiscounts(client);
+        Client saved = repository.save(client);
+        calcDiscounts(saved);
+        return saved;
     }
 
     private List<Client> getAllReferred(Client client) {
@@ -39,7 +40,7 @@ public class ClientsService {
             Client parent = consultarClient(client.getReferred());
             CompletableFuture.runAsync(()-> {
                 double discount = calcDiscount(0, parent);
-                System.out.println("discount::id:"+parent.getId()+":discount:"+discount);
+                System.out.println("discount::id:"+parent.getId()+":name:"+parent.getName()+":discount:"+discount);
                 parent.setDiscount(discount);
                 repository.update(parent);
             });
