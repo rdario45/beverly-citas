@@ -16,45 +16,47 @@ import java.util.concurrent.CompletionStage;
 public class AuthAction extends Action.Simple {
 
     private DynamoDbClient ddb;
-    static final int DAY_IN_MILLIS = 86400000;
+    static final int ONE_DAY_IN_MILLIS = 86400000;
 
     public AuthAction() {
         ddb = DynamoDbClient.builder()
                 .region(Region.US_WEST_1)
                 .credentialsProvider(StaticCredentialsProvider.create(
-                        AwsBasicCredentials.create("AKIA2LHT56OXDESCZC57", "H48xwHNVC++93NT/BK04bJJSUkg9t3Sd1bray9qg")))
-                .build();
+                                AwsBasicCredentials.create(
+                                        System.getenv("AWS_ACCESS_KEY_ID"),
+                                        System.getenv("AWS_SECRET_ACCESS_KEY")
+                                )
+                        )
+                ).build();
     }
 
     public CompletionStage<Result> call(Http.Request req) {
         System.out.println(req);
-
         Optional<String> access_token = req.queryString("access_token");
+
         if (access_token.isPresent()) {
             Optional<Map<String, AttributeValue>> dynamoItem = DynamoDBCli.getDynamoDBItem(ddb, "sessions", "access_token", access_token.get());
 
-            if( dynamoItem.isPresent() ) {
+            if (dynamoItem.isPresent()) {
                 Session session = new Session(dynamoItem.get());
-                long lastRefresh = Long.parseLong(session.lastRefresh);
+                long lastRefresh = Long.parseLong(session.getLastRefresh());
                 long currentMillis = System.currentTimeMillis();
-                if (currentMillis - lastRefresh < DAY_IN_MILLIS) {
-                    DynamoDBCli.putItemInTable(ddb, "sessions", "access_token", session.accessToken, "last_refresh", String.valueOf(currentMillis));
-                    System.out.println("Authorized");
-                    return delegate.call(req);
+
+                if (currentMillis - lastRefresh < ONE_DAY_IN_MILLIS) {
+
+                    DynamoDBCli.putItemInTable(ddb, "sessions",
+                            "access_token", session.getAccessToken(),
+                            "last_refresh", String.valueOf(currentMillis),
+                            "name", session.getUser().getName(),
+                            "telephone", session.getUser().getTelephone());
+
+//                    System.out.println("Authorized");
+                    return delegate.call(req.addAttr(Attrs.USER, session.getUser()));
                 }
             }
         }
-        System.out.println("Unauthorized");
+//        System.out.println("Unauthorized");
         return delegate.call(req);
     }
 
-    class Session {
-        public String accessToken;
-        public String lastRefresh;
-
-        Session(Map<String, AttributeValue> map) {
-            this.accessToken = map.get("access_token").s();
-            this.lastRefresh = map.get("last_refresh").n();
-        }
-    }
 }

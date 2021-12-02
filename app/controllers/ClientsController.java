@@ -2,13 +2,15 @@ package controllers;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.google.inject.Inject;
+import controllers.acl.Attrs;
 import controllers.acl.AuthAction;
+import controllers.acl.User;
 import domain.Client;
 import play.libs.Json;
 import play.mvc.*;
 import service.ClientsService;
 
-import java.util.List;
+import java.util.HashMap;
 
 @With(AuthAction.class)
 public class ClientsController extends Controller {
@@ -21,21 +23,27 @@ public class ClientsController extends Controller {
     }
 
     public Result index(Http.Request request) {
-//        request
-//            .session()
-//            .get("connected")
-//            .map(user -> ok("Hello " + user))
-//            .orElseGet(() -> unauthorized("Oops, you are not connected"));
-        List<Client> allClients = clientsService.consultarTodos();
-        return ok(Json.toJson(allClients));
+        return request.attrs().getOptional(Attrs.USER)
+                .map(user -> ok(Json.toJson(getAuthorizedResponse(user, clientsService.consultarTodos()))))
+                .orElse(unauthorized());
     }
 
     @BodyParser.Of(BodyParser.Json.class)
     public Result save(Http.Request request) {
-        JsonNode json = request.body().asJson();
-        Client client = Json.fromJson(json, Client.class);
-        Client registrado = clientsService.registrarCliente(client);
-        return ok(Json.toJson(registrado));
+        return request.attrs().getOptional(Attrs.USER)
+                .map(user -> {
+                    JsonNode json = request.body().asJson();
+                    Client client = Json.fromJson(json, Client.class);
+                    Client data = clientsService.registrarCliente(client);
+                    return ok(Json.toJson(getAuthorizedResponse(user, data)));
+                }).orElse(unauthorized());
+    }
+
+    private HashMap getAuthorizedResponse(User user, Object data) {
+        HashMap response = new HashMap();
+        response.put("data", data);
+        response.put("user", user);
+        return response;
     }
 
 }

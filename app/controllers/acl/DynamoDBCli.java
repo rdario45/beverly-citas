@@ -34,7 +34,6 @@ public class DynamoDBCli {
             }
         } catch (DynamoDbException e) {
             System.err.println(e.getMessage());
-            System.exit(1);
         }
         return Optional.empty();
     }
@@ -43,13 +42,19 @@ public class DynamoDBCli {
                                       String tableName,
                                       String key,
                                       String keyVal,
-                                      String lastRefreshTitle,
-                                      String lastRefreshValue){
+                                      String lastRefresh,
+                                      String lastRefreshValue,
+                                      String name,
+                                      String nameValue,
+                                      String telephone,
+                                      String telephoneNumber){
 
         HashMap<String,AttributeValue> itemValues = new HashMap<>();
 
         itemValues.put(key, AttributeValue.builder().s(keyVal).build());
-        itemValues.put(lastRefreshTitle, AttributeValue.builder().n(lastRefreshValue).build());
+        itemValues.put(lastRefresh, AttributeValue.builder().n(lastRefreshValue).build());
+        itemValues.put(name, AttributeValue.builder().s(nameValue).build());
+        itemValues.put(telephone, AttributeValue.builder().s(telephoneNumber).build());
 
         PutItemRequest request = PutItemRequest.builder()
                 .tableName(tableName)
@@ -60,10 +65,8 @@ public class DynamoDBCli {
             ddb.putItem(request);
         } catch (ResourceNotFoundException e) {
             System.err.format("Error: The Amazon DynamoDB table \"%s\" can't be found.\n", tableName);
-            System.exit(1);
         } catch (DynamoDbException e) {
             System.err.println(e.getMessage());
-            System.exit(1);
         }
     }
 }

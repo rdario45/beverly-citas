@@ -40,7 +40,6 @@ public class ClientsService {
             Client parent = consultarClient(client.getReferred());
             CompletableFuture.runAsync(()-> {
                 double discount = calcDiscount(0, parent);
-                System.out.println("discount::id:"+parent.getId()+":name:"+parent.getName()+":discount:"+discount);
                 parent.setDiscount(discount);
                 repository.update(parent);
             });
@@ -50,7 +49,6 @@ public class ClientsService {
 
     private double calcDiscount(Integer level, Client client) {
         if ( level < 4) { // max 3
-            System.out.println("calc_disc::id:"+client.getId()+":level:"+level+":name:"+client.getName());
             List<Client> referidos = getAllReferred(client);
             if ( referidos.size() > 2 ) { // min 3
                 return 0.05 + referidos.stream()
