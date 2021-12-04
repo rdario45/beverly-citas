@@ -50,12 +50,10 @@ public class AuthAction extends Action.Simple {
                             "name", session.getUser().getName(),
                             "telephone", session.getUser().getTelephone());
 
-//                    System.out.println("Authorized");
                     return delegate.call(req.addAttr(Attrs.USER, session.getUser()));
                 }
             }
         }
-//        System.out.println("Unauthorized");
         return delegate.call(req);
     }
 

@@ -13,7 +13,6 @@ public class DynamoDBCli {
                                                                         String tableName,
                                                                         String key,
                                                                         String keyVal) {
-
         HashMap<String,AttributeValue> keyToGet = new HashMap<>();
 
         keyToGet.put(key, AttributeValue.builder().s(keyVal).build());
