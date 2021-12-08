@@ -17,7 +17,7 @@ public class ClientsService {
     }
 
     public List<Client> consultarTodos() {
-        return repository.listAll();
+        return repository.findAll();
     }
 
     public Client registrarCliente(Client client) {
@@ -36,7 +36,7 @@ public class ClientsService {
     }
 
     private void calcDiscounts(Client client) {
-        if (client.getReferred() != 0 ) {
+        if (client.getReferred() != null ) {
             Client parent = consultarClient(client.getReferred());
             CompletableFuture.runAsync(()-> {
                 double discount = calcDiscount(0, parent);

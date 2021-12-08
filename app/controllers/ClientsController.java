@@ -2,9 +2,9 @@ package controllers;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.google.inject.Inject;
-import controllers.acl.Attrs;
+import controllers.acl.types.Attrs;
 import controllers.acl.AuthAction;
-import controllers.acl.User;
+import controllers.acl.types.User;
 import domain.Client;
 import play.libs.Json;
 import play.mvc.*;

@@ -1,5 +1,7 @@
 package controllers.acl;
 
+import controllers.acl.types.Attrs;
+import controllers.acl.types.Session;
 import play.mvc.Action;
 import play.mvc.Http;
 import play.mvc.Result;
@@ -48,7 +50,7 @@ public class AuthAction extends Action.Simple {
                             "access_token", session.getAccessToken(),
                             "last_refresh", String.valueOf(currentMillis),
                             "name", session.getUser().getName(),
-                            "telephone", session.getUser().getTelephone());
+                            "phone", session.getUser().getPhone());
 
                     return delegate.call(req.addAttr(Attrs.USER, session.getUser()));
                 }

@@ -17,12 +17,12 @@ public class ClientRepository {
     this.db = new DBI(db.dataSource());
   }
 
-  public List<Client> listAll() {
-    return db.onDemand(ClientSQL.class).listAll();
-  }
-
   public Client find(Integer id) {
     return db.onDemand(ClientSQL.class).find(id);
+  }
+
+  public List<Client> findAll() {
+    return db.onDemand(ClientSQL.class).listAll();
   }
 
   public Client save(Client client) {

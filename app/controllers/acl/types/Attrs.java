@@ -1,4 +1,4 @@
-package controllers.acl;
+package controllers.acl.types;
 
 import play.libs.typedmap.TypedKey;
 
