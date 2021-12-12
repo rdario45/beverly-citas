@@ -12,7 +12,10 @@ public class Session {
     public Session(Map<String, AttributeValue> map) {
         this.accessToken = map.get("access_token").s();
         this.lastRefresh = map.get("last_refresh").n();
-        this.user = new User(map.get("name").s(), map.get("telephone").s());
+        this.user = new User(
+                map.get("name").s(),
+                map.get("telephone").s()
+        );
     }
 
     public User getUser() {

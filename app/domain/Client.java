@@ -8,18 +8,16 @@ public class Client{
     private String telephone;
     private Integer referred;
     private Double discount;
-    private String status;
 
     public Client() {}
 
-    public Client(Integer id, String name, String address, String telephone, Integer referred, Double discount, String status) {
+    public Client(Integer id, String name, String address, String telephone, Integer referred, Double discount) {
         this.id = id;
         this.name = name;
         this.address = address;
         this.telephone = telephone;
         this.referred = referred;
         this.discount = discount;
-        this.status = status;
     }
 
     public Integer getId() {
@@ -68,13 +66,5 @@ public class Client{
 
     public void setDiscount(Double discount) {
         this.discount = discount;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
     }
 }

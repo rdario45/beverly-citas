@@ -16,28 +16,27 @@ public class ClientsService {
         this.repository = repository;
     }
 
-    public List<Client> consultarTodos() {
+    public List<Client> findAll() {
         return repository.findAll();
     }
 
-    public Client registrarCliente(Client client) {
-        client.setStatus("ACTIVE");
+    public Client registerClient(Client client) {
         Client saved = repository.save(client);
         calcDiscounts(saved);
         return saved;
     }
 
-    private List<Client> getAllReferred(Client client) {
+    private List<Client> findAllReferred(Client client) {
         return repository.getAllReferred(client.getId());
     }
 
-    private Client consultarClient(Integer id) {
+    private Client findClient(Integer id) {
         return repository.find(id);
     }
 
     private void calcDiscounts(Client client) {
         if (client.getReferred() != null ) {
-            Client parent = consultarClient(client.getReferred());
+            Client parent = findClient(client.getReferred());
             CompletableFuture.runAsync(()-> {
                 double discount = calcDiscount(0, parent);
                 parent.setDiscount(discount);
@@ -49,9 +48,9 @@ public class ClientsService {
 
     private double calcDiscount(Integer level, Client client) {
         if ( level < 4) { // max 3
-            List<Client> referidos = getAllReferred(client);
-            if ( referidos.size() > 2 ) { // min 3
-                return 0.05 + referidos.stream()
+            List<Client> referred = findAllReferred(client);
+            if ( referred.size() > 2 ) { // min 3
+                return 0.05 + referred.stream()
                         .map(c -> calcDiscount(level + 1, c))
                         .reduce(Double::sum).get();
             }

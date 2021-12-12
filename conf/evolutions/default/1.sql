@@ -8,7 +8,6 @@ CREATE TABLE clients (
   address varchar(45) DEFAULT NULL,
   telephone varchar(45) NOT NULL,
   referred integer DEFAULT NULL,
-  status varchar(45) NOT NULL,
   discount NUMERIC(3,2) DEFAULT 0
 );
 

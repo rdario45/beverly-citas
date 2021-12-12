@@ -24,7 +24,7 @@ public class ClientsController extends Controller {
 
     public Result index(Http.Request request) {
         return request.attrs().getOptional(Attrs.USER)
-                .map(user -> ok(Json.toJson(getAuthorizedResponse(user, clientsService.consultarTodos()))))
+                .map(user -> ok(Json.toJson(getAuthorizedResponse(user, clientsService.findAll()))))
                 .orElse(unauthorized());
     }
 
@@ -34,7 +34,7 @@ public class ClientsController extends Controller {
                 .map(user -> {
                     JsonNode json = request.body().asJson();
                     Client client = Json.fromJson(json, Client.class);
-                    Client data = clientsService.registrarCliente(client);
+                    Client data = clientsService.registerClient(client);
                     return ok(Json.toJson(getAuthorizedResponse(user, data)));
                 }).orElse(unauthorized());
     }

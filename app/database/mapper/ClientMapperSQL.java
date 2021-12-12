@@ -16,8 +16,7 @@ public class ClientMapperSQL implements ResultSetMapper<Client> {
                 r.getString("address"),
                 r.getString("telephone"),
                 r.getInt("referred"),
-                r.getDouble("discount"),
-                r.getString("status")
+                r.getDouble("discount")
         );
     }
 }
