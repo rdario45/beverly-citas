@@ -1,10 +1,10 @@
 package controllers;
 
+import acl.AuthAction;
+import acl.types.Attrs;
+import acl.types.User;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.google.inject.Inject;
-import controllers.acl.types.Attrs;
-import controllers.acl.AuthAction;
-import controllers.acl.types.User;
 import domain.Client;
 import play.libs.Json;
 import play.mvc.*;
@@ -22,11 +22,21 @@ public class ClientsController extends Controller {
         this.clientsService = clientsService;
     }
 
-    public Result index(Http.Request request) {
+    public Result list(Http.Request request) {
         return request.attrs().getOptional(Attrs.USER)
                 .map(user -> ok(Json.toJson(getAuthorizedResponse(user, clientsService.findAll()))))
                 .orElse(unauthorized());
     }
+
+    public Result find(Integer id, Http.Request request) {
+        return  request.attrs().getOptional(Attrs.USER)
+                .map(user -> clientsService.find(id)
+                        .map(client ->
+                                ok(Json.toJson(getAuthorizedResponse(user, client)))
+                        ).orElse(notFound())
+                ).orElse(unauthorized());
+    }
+
 
     @BodyParser.Of(BodyParser.Json.class)
     public Result save(Http.Request request) {

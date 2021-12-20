@@ -1,30 +1,34 @@
 package domain;
 
-public class Client{
+import acl.BeverlyAttrib;
 
-    private Integer id;
+public class Client {
+
+    @BeverlyAttrib(type = "S")
+    private String id;
+    @BeverlyAttrib(type = "S")
     private String name;
+    @BeverlyAttrib(type = "S")
     private String address;
-    private String telephone;
-    private Integer referred;
-    private Double discount;
+    @BeverlyAttrib(type = "S")
+    private String phone;
+//    private Integer referred;
+//    private Double discount;
 
     public Client() {}
 
-    public Client(Integer id, String name, String address, String telephone, Integer referred, Double discount) {
+    public Client(String id, String name, String address, String phone) {
         this.id = id;
         this.name = name;
         this.address = address;
-        this.telephone = telephone;
-        this.referred = referred;
-        this.discount = discount;
+        this.phone = phone;
     }
 
-    public Integer getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -44,27 +48,11 @@ public class Client{
         this.address = address;
     }
 
-    public String getTelephone() {
-        return telephone;
+    public String getPhone() {
+        return phone;
     }
 
-    public void setTelephone(String telephone) {
-        this.telephone = telephone;
-    }
-
-    public Integer getReferred() {
-        return referred;
-    }
-
-    public void setReferred(Integer referred) {
-        this.referred = referred;
-    }
-
-    public Double getDiscount() {
-        return discount;
-    }
-
-    public void setDiscount(Double discount) {
-        this.discount = discount;
+    public void setPhone(String phone) {
+        this.phone = phone;
     }
 }
