@@ -5,20 +5,20 @@ import acl.types.Attrs;
 import acl.types.User;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.google.inject.Inject;
-import domain.Client;
+import domain.Clienta;
 import play.libs.Json;
 import play.mvc.*;
-import service.ClientsService;
+import service.ClientasService;
 
 import java.util.HashMap;
 
 @With(AuthAction.class)
-public class ClientsController extends Controller {
+public class ClientasController extends Controller {
 
-    private ClientsService clientsService;
+    private ClientasService clientsService;
 
     @Inject
-    public ClientsController(ClientsService clientsService) {
+    public ClientasController(ClientasService clientsService) {
         this.clientsService = clientsService;
     }
 
@@ -43,8 +43,8 @@ public class ClientsController extends Controller {
         return request.attrs().getOptional(Attrs.USER)
                 .map(user -> {
                     JsonNode json = request.body().asJson();
-                    Client client = Json.fromJson(json, Client.class);
-                    Client data = clientsService.registerClient(client);
+                    Clienta client = Json.fromJson(json, Clienta.class);
+                    Clienta data = clientsService.registerClient(client);
                     return ok(Json.toJson(getAuthorizedResponse(user, data)));
                 }).orElse(unauthorized());
     }

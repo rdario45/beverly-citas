@@ -2,25 +2,20 @@ package domain;
 
 import acl.BeverlyAttrib;
 
-public class Client {
+public class Clienta {
 
     @BeverlyAttrib(type = "S")
     private String id;
     @BeverlyAttrib(type = "S")
     private String name;
     @BeverlyAttrib(type = "S")
-    private String address;
-    @BeverlyAttrib(type = "S")
     private String phone;
-//    private Integer referred;
-//    private Double discount;
 
-    public Client() {}
+    public Clienta() {}
 
-    public Client(String id, String name, String address, String phone) {
+    public Clienta(String id, String name, String phone) {
         this.id = id;
         this.name = name;
-        this.address = address;
         this.phone = phone;
     }
 
@@ -40,14 +35,6 @@ public class Client {
         this.name = name;
     }
 
-    public String getAddress() {
-        return address;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
-    }
-
     public String getPhone() {
         return phone;
     }
@@ -55,4 +42,5 @@ public class Client {
     public void setPhone(String phone) {
         this.phone = phone;
     }
+
 }

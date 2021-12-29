@@ -16,7 +16,7 @@ public class Session {
 
     @BeverlyAttrib(type = "M")
     private User user;
-    
+
     public Session(Map<String, AttributeValue> map) {
         this.accessToken = map.get("accessToken").s();
         this.lastRefresh = Optional.ofNullable(map.get("lastRefresh")).map(AttributeValue::n).map(Long::parseLong).orElse(0l);
