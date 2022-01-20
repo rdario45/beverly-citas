@@ -16,18 +16,18 @@ public class Cita {
     private String agenda;
 
     @BeverlyAttrib(type="S")
-    private String clienta;
+    private String cliente;
 
     @BeverlyAttrib(type="L")
     private List<Servicio> servicios;
 
     public Cita() {}
 
-    public Cita(String id, String hora, String agenda, String clienta, List<Servicio> servicios) {
+    public Cita(String id, String hora, String agenda, String cliente, List<Servicio> servicios) {
         this.id = id;
         this.hora = hora;
         this.agenda = agenda;
-        this.clienta = clienta;
+        this.cliente = cliente;
         this.servicios = servicios;
     }
 
@@ -55,12 +55,12 @@ public class Cita {
         this.agenda = agenda;
     }
 
-    public String getClienta() {
-        return clienta;
+    public String getCliente() {
+        return cliente;
     }
 
-    public void setClienta(String clienta) {
-        this.clienta = clienta;
+    public void setCliente(String cliente) {
+        this.cliente = cliente;
     }
 
     public List<Servicio> getServicios() {
@@ -80,7 +80,7 @@ public class Cita {
     @Override
     public boolean equals(Object obj) {
         if(obj instanceof Cita) {
-            return this.getClienta().equals(((Cita) obj).getClienta());
+            return this.getCliente().equals(((Cita) obj).getCliente());
         }
         return super.equals(obj);
     }
