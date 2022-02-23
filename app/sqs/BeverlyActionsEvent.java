@@ -1,6 +1,6 @@
 package sqs;
 
-import acl.BeverlyAction;
+import acl.types.BeverlyAction;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 
@@ -9,12 +9,12 @@ import java.util.List;
 import java.util.Map;
 
 @Singleton
-public class ActionsEvent {
+public class BeverlyActionsEvent {
 
     private Map<String, List<BeverlyAction>> actions = new HashMap<>();
 
     @Inject
-    public ActionsEvent() {
+    public BeverlyActionsEvent() {
     }
 
     public void update(String eventName, Object... args) {

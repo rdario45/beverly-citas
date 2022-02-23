@@ -1,6 +1,6 @@
 package mapper;
 
-import acl.DynamoMapper;
+import acl.BeverlyDynamoMapper;
 import domain.Cita;
 import software.amazon.awssdk.services.dynamodb.model.AttributeValue;
 
@@ -10,7 +10,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-public class CitaMapper implements DynamoMapper<Cita> {
+public class CitaMapper implements BeverlyDynamoMapper<Cita> {
 
     public Cita map(Map<String, AttributeValue> map) {
         return new Cita(
@@ -19,8 +19,8 @@ public class CitaMapper implements DynamoMapper<Cita> {
                 Optional.ofNullable(map.get("agenda")).map(AttributeValue::s).orElse("undefined"),
                 Optional.ofNullable(map.get("cliente")).map(AttributeValue::s).orElse("undefined"),
                 Optional.ofNullable(map.get("servicios")).map(AttributeValue::l)
-                .map(attributeValues -> new ServicioMapper().map(attributeValues))
-                .orElse(Collections.emptyList())
+                        .map(attributeValues -> new ServicioMapper().map(attributeValues))
+                        .orElse(Collections.emptyList())
         );
     }
 

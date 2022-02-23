@@ -1,8 +1,8 @@
 package controllers;
 
-import acl.AuthAction;
-import acl.types.Attrs;
-import acl.types.User;
+import acl.BeverlyAuthAction;
+import acl.types.BeverlyHttpAuthObject;
+import acl.types.BeverlyHttpReqAttrib;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.google.inject.Inject;
 import domain.Cita;
@@ -12,7 +12,7 @@ import service.CitasService;
 
 import java.util.HashMap;
 
-@With(AuthAction.class)
+@With(BeverlyAuthAction.class)
 public class CitasController extends Controller {
 
     private CitasService citasService;
@@ -22,15 +22,9 @@ public class CitasController extends Controller {
         this.citasService = citasService;
     }
 
-    public Result list(Http.Request request) {
-        return request.attrs().getOptional(Attrs.USER).map(user ->
-                ok(Json.toJson(getAuthorizedResponse(user, citasService.findAll())))
-        ).orElse(unauthorized());
-    }
-
     @BodyParser.Of(BodyParser.Json.class)
     public Result save(Http.Request request) {
-        return request.attrs().getOptional(Attrs.USER).map(user -> {
+        return request.attrs().getOptional(BeverlyHttpReqAttrib.USER).map(user -> {
             JsonNode json = request.body().asJson();
             Cita cita = Json.fromJson(json, Cita.class);
             Cita data = citasService.save(cita);
@@ -40,7 +34,7 @@ public class CitasController extends Controller {
 
     @BodyParser.Of(BodyParser.Json.class)
     public Result update(String id, Http.Request request) {
-        return request.attrs().getOptional(Attrs.USER).map(user -> {
+        return request.attrs().getOptional(BeverlyHttpReqAttrib.USER).map(user -> {
             JsonNode json = request.body().asJson();
             Cita cita = Json.fromJson(json, Cita.class);
             return citasService.update(cita, id).map(data ->
@@ -50,14 +44,14 @@ public class CitasController extends Controller {
     }
 
     public Result delete(String id, Http.Request request) {
-        return request.attrs().getOptional(Attrs.USER).map(user ->
+        return request.attrs().getOptional(BeverlyHttpReqAttrib.USER).map(user ->
                         citasService.delete(id).map(data ->
                                 ok(Json.toJson(getAuthorizedResponse(user, data)))
                         ).orElse(notFound()))
                 .orElse(unauthorized());
     }
 
-    private HashMap getAuthorizedResponse(User user, Object data) {
+    private HashMap getAuthorizedResponse(BeverlyHttpAuthObject user, Object data) {
         HashMap response = new HashMap();
         response.put("data", data);
         response.put("user", user);

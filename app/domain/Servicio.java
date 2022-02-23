@@ -1,6 +1,7 @@
 package domain;
 
-import acl.BeverlyAttrib;
+
+import acl.types.BeverlyAttrib;
 
 public class Servicio {
 

@@ -9,7 +9,6 @@ import sqs.events.CitaActualizada;
 import sqs.events.CitaCreada;
 import sqs.events.CitaEliminada;
 
-import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -20,14 +19,6 @@ public class CitasService {
     @Inject
     public CitasService(CitaRepository repository) {
         this.repository = repository;
-    }
-
-    public Optional<Cita> find(String id) {
-        return repository.find(id);
-    }
-
-    public List<Cita> findAll() {
-        return repository.findAll();
     }
 
     public Cita save(Cita cita) {
