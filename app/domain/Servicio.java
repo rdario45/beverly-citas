@@ -1,17 +1,14 @@
 package domain;
 
-
 import acl.types.BeverlyAttrib;
 
 public class Servicio {
 
-    @BeverlyAttrib(type="S")
+    @BeverlyAttrib(type = "S")
     private String nombre;
 
-    @BeverlyAttrib(type="N")
+    @BeverlyAttrib(type = "N")
     private String valor;
-
-    public Servicio() {}
 
     public Servicio(String nombre, String valor) {
         this.nombre = nombre;
@@ -33,5 +30,4 @@ public class Servicio {
     public void setValor(String valor) {
         this.valor = valor;
     }
-
 }

@@ -1,35 +1,40 @@
 package domain;
 
-
 import acl.types.BeverlyAttrib;
 
 import java.util.List;
 
 public class Cita {
 
-    @BeverlyAttrib(type="S")
+    @BeverlyAttrib(type = "S")
     private String id;
 
-    @BeverlyAttrib(type="N")
+    @BeverlyAttrib(type = "N")
     private String hora;
 
-    @BeverlyAttrib(type="S")
+    @BeverlyAttrib(type = "S")
     private String agenda;
 
-    @BeverlyAttrib(type="S")
+    @BeverlyAttrib(type = "S")
     private String cliente;
 
-    @BeverlyAttrib(type="L")
+    @BeverlyAttrib(type = "L")
     private List<Servicio> servicios;
 
-    public Cita() {}
+    @BeverlyAttrib(type = "S")
+    private String telefono;
 
-    public Cita(String id, String hora, String agenda, String cliente, List<Servicio> servicios) {
+    @BeverlyAttrib(type = "N")
+    private String porcentaje;
+
+    public Cita(String id, String hora, String agenda, String cliente, List<Servicio> servicios, String telefono, String porcentaje) {
         this.id = id;
         this.hora = hora;
         this.agenda = agenda;
         this.cliente = cliente;
         this.servicios = servicios;
+        this.telefono = telefono;
+        this.porcentaje = porcentaje;
     }
 
     public String getId() {
@@ -72,17 +77,19 @@ public class Cita {
         this.servicios = servicios;
     }
 
-    public Cita update(Cita cita) {
-        this.setHora(cita.getHora());
-        this.setServicios(cita.getServicios());
-        return this;
+    public String getTelefono() {
+        return telefono;
     }
 
-    @Override
-    public boolean equals(Object obj) {
-        if(obj instanceof Cita) {
-            return this.getCliente().equals(((Cita) obj).getCliente());
-        }
-        return super.equals(obj);
+    public void setTelefono(String telefono) {
+        this.telefono = telefono;
+    }
+
+    public String getPorcentaje() {
+        return porcentaje;
+    }
+
+    public void setPorcentaje(String porcentaje) {
+        this.porcentaje = porcentaje;
     }
 }
