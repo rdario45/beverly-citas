@@ -92,4 +92,17 @@ public class Cita {
     public void setPorcentaje(String porcentaje) {
         this.porcentaje = porcentaje;
     }
+
+    @Override
+    public String toString() {
+        return "Cita{" +
+                "id='" + id + '\'' +
+                ", hora='" + hora + '\'' +
+                ", agenda='" + agenda + '\'' +
+                ", cliente='" + cliente + '\'' +
+                ", servicios=" + servicios +
+                ", telefono='" + telefono + '\'' +
+                ", porcentaje='" + porcentaje + '\'' +
+                '}';
+    }
 }

@@ -30,7 +30,7 @@ public class CitasService {
     }
 
     public Optional<Cita> update(Cita cita, String id) {
-        return repository.find(id).map(found -> {
+        return repository.findFirst(id).map(found -> {
             cita.setId(found.getId());
             CitaActualizada citaActualizada = new CitaActualizada(cita);
             BeverlySNS.send(Json.toJson(citaActualizada).toString());
@@ -39,7 +39,7 @@ public class CitasService {
     }
 
     public Optional<Cita> delete(String id) {
-        return repository.find(id).map(cita -> {
+        return repository.findFirst(id).map(cita -> {
             CitaEliminada citaEliminada = new CitaEliminada(cita);
             repository.remove(id);
             BeverlySNS.send(Json.toJson(citaEliminada).toString());

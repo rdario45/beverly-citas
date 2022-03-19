@@ -23,7 +23,6 @@ public class BeverlyDynamoDB {
 
     @Inject
     public BeverlyDynamoDB(Config config) {
-        System.out.println("BeverlyDB enabled!");
         this.ddb = DynamoDbClient.builder()
                 .region(Region.US_WEST_1)
                 .credentialsProvider(
@@ -39,17 +38,14 @@ public class BeverlyDynamoDB {
     public static Optional<Map<String, AttributeValue>> getItem(String tableName,
                                                                 String key,
                                                                 String keyVal) {
-
         HashMap<String, AttributeValue> keyToGet = new HashMap<>();
         keyToGet.put(key, AttributeValue.builder().s(keyVal).build());
         GetItemRequest request = GetItemRequest.builder()
                 .key(keyToGet)
                 .tableName(tableName)
                 .build();
-
         try {
             Map<String, AttributeValue> returnedItem = ddb.getItem(request).item();
-
             if (!returnedItem.isEmpty()) {
                 return Optional.of(returnedItem);
             } else {
@@ -63,9 +59,7 @@ public class BeverlyDynamoDB {
     }
 
     public static <T> T putItem(String tableName, T record) {
-
         HashMap<String, AttributeValue> itemValues = getAttributeValueHashMapFromRecord(record);
-
         PutItemRequest request = PutItemRequest.builder()
                 .tableName(tableName)
                 .item(itemValues)
@@ -81,13 +75,10 @@ public class BeverlyDynamoDB {
     }
 
     private static <T> HashMap<String, AttributeValue> getAttributeValueHashMapFromRecord(T record) {
-
         HashMap<String, AttributeValue> itemValues = new HashMap<>();
-
         Arrays.stream(record.getClass().getDeclaredFields())
                 .filter(field -> field.getAnnotation(BeverlyAttrib.class) != null)
                 .forEach(field -> itemValues.put(field.getName(), getAttributeValueFromRecord(record, field)));
-
         return itemValues;
 
     }
@@ -127,26 +118,19 @@ public class BeverlyDynamoDB {
         return attributeValue;
     }
 
-    public static List<Map<String, AttributeValue>> getAll(String tableName,
-                                                           String filterExpression,
-                                                           Map<String, AttributeValue> values) {
-        ScanRequest scanRequest = ScanRequest.builder()
-                .tableName(tableName)
-                .filterExpression(filterExpression)
-                .expressionAttributeValues(values)
-                .build();
-
-        ScanResponse scan = ddb.scan(scanRequest);
-
-        List<Map<String, AttributeValue>> items = null;
-
+    public static void removeItem(String tableName, String key, String keyVal) {
         try {
-            items = scan.items();
-        } catch (Exception e) {
-            System.err.println("Unable to scan the table:");
-            System.err.println(e.getMessage());
+            Map<String, AttributeValue> keyMap = new HashMap<>();
+            keyMap.put(key, AttributeValue.builder().s(keyVal).build());
+
+            DeleteItemRequest dir = DeleteItemRequest.builder()
+                    .tableName(tableName)
+                    .key(keyMap)
+                    .build();
+            ddb.deleteItem(dir);
+        } catch (DynamoDbException e) {
+            System.err.format("%s %s " + e.getMessage(), tableName, key);
         }
-        return items;
     }
 
     public static Optional<Map<String, AttributeValue>> getFirst(String tableName,
@@ -168,20 +152,5 @@ public class BeverlyDynamoDB {
             System.exit(-1);
         }
         return Optional.empty();
-    }
-
-    public static void removeItem(String tableName, String key, String keyVal) {
-        try {
-            Map<String, AttributeValue> keyMap = new HashMap<>();
-            keyMap.put(key, AttributeValue.builder().s(keyVal).build());
-
-            DeleteItemRequest dir = DeleteItemRequest.builder()
-                    .tableName(tableName)
-                    .key(keyMap)
-                    .build();
-            ddb.deleteItem(dir);
-        } catch (DynamoDbException e) {
-            System.err.format("%s %s " + e.getMessage(), tableName, key);
-        }
     }
 }

@@ -1,7 +1,9 @@
 package mapper;
 
 import acl.BeverlyDynamoMapper;
+import acl.types.BeverlyAttrib;
 import domain.Cita;
+import domain.Servicio;
 import software.amazon.awssdk.services.dynamodb.model.AttributeValue;
 
 import java.util.Collections;
@@ -11,7 +13,6 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class CitaMapper implements BeverlyDynamoMapper<Cita> {
-
     public Cita map(Map<String, AttributeValue> map) {
         return new Cita(
                 Optional.ofNullable(map.get("id")).map(AttributeValue::s).orElse("uuid"),
@@ -22,7 +23,7 @@ public class CitaMapper implements BeverlyDynamoMapper<Cita> {
                         .map(attributeValues -> new ServicioMapper().map(attributeValues))
                         .orElse(Collections.emptyList()),
                 Optional.ofNullable(map.get("telefono")).map(AttributeValue::s).orElse("+57 "),
-                Optional.ofNullable(map.get("porcentaje")).map(AttributeValue::n).orElse("100")
+                Optional.ofNullable(map.get("porcentaje")).map(AttributeValue::n).orElse("50")
         );
     }
 
