@@ -16,7 +16,7 @@ public class CitaRepository {
         long millisEnd = new DateTime("2022-12-31T05:00:00.000-05:00").getMillis();
         HashMap<String, AttributeValue> values = new HashMap<>();
         values.put(":id", AttributeValue.builder().s(id).build());
-        values.put(":horaInicial", AttributeValue.builder().n("" + millisInit).build());
+        values.put(":horaInicial", AttributeValue.builder().n(""+millisInit).build());
         values.put(":horaFinal", AttributeValue.builder().n("" + millisEnd).build());
         return BeverlyDynamoDB.getFirst("citas", "id = :id AND hora BETWEEN :horaInicial AND :horaFinal", values)
                 .map(valueMap -> new CitaMapper().map(valueMap));

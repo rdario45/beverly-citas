@@ -38,9 +38,7 @@ public class CitasController extends Controller {
             JsonNode json = request.body().asJson();
             Cita cita = Json.fromJson(json, Cita.class);
             return citasService.update(cita, id).map(data ->
-
                     ok(Json.toJson(getAuthorizedResponse(user, data)))
-
             ).orElse(notFound());
         }).orElse(unauthorized());
     }
