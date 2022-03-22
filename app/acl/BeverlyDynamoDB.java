@@ -118,10 +118,11 @@ public class BeverlyDynamoDB {
         return attributeValue;
     }
 
-    public static void removeItem(String tableName, String key, String keyVal) {
+    public static void removeItem(String tableName, String key, String keyVal, String sortKey, String sortkeyVal) {
         try {
             Map<String, AttributeValue> keyMap = new HashMap<>();
             keyMap.put(key, AttributeValue.builder().s(keyVal).build());
+            keyMap.put(sortKey, AttributeValue.builder().n(sortkeyVal).build());
 
             DeleteItemRequest dir = DeleteItemRequest.builder()
                     .tableName(tableName)

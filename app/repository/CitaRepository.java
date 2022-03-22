@@ -11,6 +11,14 @@ import java.util.Optional;
 
 public class CitaRepository {
 
+    public Cita save(Cita cita) {
+        return BeverlyDynamoDB.putItem("citas", cita);
+    }
+
+    public void remove(String id, String hora) {
+        BeverlyDynamoDB.removeItem("citas", "id", id, "hora", hora);
+    }
+
     public Optional<Cita> findFirst(String id) {
         long millisInit = new DateTime("2022-01-01T05:00:00.000-05:00").getMillis();
         long millisEnd = new DateTime("2022-12-31T05:00:00.000-05:00").getMillis();
@@ -20,13 +28,5 @@ public class CitaRepository {
         values.put(":horaFinal", AttributeValue.builder().n("" + millisEnd).build());
         return BeverlyDynamoDB.getFirst("citas", "id = :id AND hora BETWEEN :horaInicial AND :horaFinal", values)
                 .map(valueMap -> new CitaMapper().map(valueMap));
-    }
-
-    public Cita save(Cita cita) {
-        return BeverlyDynamoDB.putItem("citas", cita);
-    }
-
-    public void remove(String id) {
-        BeverlyDynamoDB.removeItem("citas", "id", id);
     }
 }

@@ -34,6 +34,7 @@ public class CitasService {
             cita.setId(found.getId());
             CitaActualizada citaActualizada = new CitaActualizada(cita);
             BeverlySNS.send(Json.toJson(citaActualizada).toString());
+            repository.remove(id, found.getHora());
             return repository.save(cita);
         });
     }
@@ -41,7 +42,7 @@ public class CitasService {
     public Optional<Cita> delete(String id) {
         return repository.findFirst(id).map(cita -> {
             CitaEliminada citaEliminada = new CitaEliminada(cita);
-            repository.remove(id);
+            repository.remove(id, cita.getHora());
             BeverlySNS.send(Json.toJson(citaEliminada).toString());
             return cita;
         });
