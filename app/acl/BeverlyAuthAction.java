@@ -17,6 +17,7 @@ public class BeverlyAuthAction extends Action.Simple {
     static final int EIGHT_HOURS_IN_MILLIS = 28800000;
 
     public CompletionStage<Result> call(Http.Request req) {
+        System.out.println(req.toString());
         return req.queryString("access_token")
                 .flatMap(accessToken -> getSessionItem(accessToken)
                         .flatMap(beverlyHttpAuthObject -> {
@@ -29,8 +30,8 @@ public class BeverlyAuthAction extends Action.Simple {
     private Optional<BeverlyHttpAuthObject> getSessionItem(String httpReqAccessToken) {
         HashMap<String, AttributeValue> values = new HashMap<>();
         values.put(":accessToken", AttributeValue.builder().s(httpReqAccessToken).build());
-        values.put(":expiresAt", AttributeValue.builder().n(""+new DateTime().getMillis()).build());
-        return BeverlyDynamoDB.getFirst("auth", "accessToken = :accessToken AND expiresAt > :expiresAt", values)
+        values.put(":now", AttributeValue.builder().n("" + new DateTime().getMillis()).build());
+        return BeverlyDynamoDB.getFirst("authToken", "accessToken = :accessToken AND expiresAt > :now", values)
                 .map(BeverlyHttpAuthObject::new);
     }
 }
