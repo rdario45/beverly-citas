@@ -7,6 +7,7 @@ import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider;
 import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.sns.SnsClient;
 import software.amazon.awssdk.services.sns.model.PublishRequest;
+import software.amazon.awssdk.services.sns.model.PublishResponse;
 import software.amazon.awssdk.services.sqs.model.SqsException;
 
 import javax.inject.Singleton;
@@ -38,6 +39,7 @@ public class BeverlySNS {
                     .topicArn(topicArn)
                     .build();
             snsClient.publish(request);
+            System.out.printf("Published: %s \n", message);
         } catch (SqsException e) {
             System.err.println(e.awsErrorDetails().errorMessage());
             System.exit(1);
