@@ -6,3 +6,5 @@
 POST    /citas                      controllers.CitasController.save(request: Request)
 PUT     /citas/:id                  controllers.CitasController.update(id: String, request: Request)
 DELETE  /citas/:id                  controllers.CitasController.delete(id: String, request: Request)
+GET     /citas/how-many             controllers.CitasController.howMany(request: Request)
+GET     /citas/how-much             controllers.CitasController.howMuch(request: Request)

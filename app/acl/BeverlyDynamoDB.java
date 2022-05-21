@@ -154,4 +154,26 @@ public class BeverlyDynamoDB {
         }
         return Optional.empty();
     }
+
+    public static List<Map<String, AttributeValue>> getAll(String tableName,
+                                                           String filterExpression,
+                                                           Map<String, AttributeValue> values) {
+        ScanRequest scanRequest = ScanRequest.builder()
+                .tableName(tableName)
+                .filterExpression(filterExpression)
+                .expressionAttributeValues(values)
+                .build();
+
+        ScanResponse scan = ddb.scan(scanRequest);
+
+        List<Map<String, AttributeValue>> items = null;
+
+        try {
+            items = scan.items();
+        } catch (Exception e) {
+            System.err.println("Unable to scan the table:");
+            System.err.println(e.getMessage());
+        }
+        return items;
+    }
 }

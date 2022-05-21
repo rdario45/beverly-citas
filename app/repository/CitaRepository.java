@@ -7,7 +7,9 @@ import org.joda.time.DateTime;
 import software.amazon.awssdk.services.dynamodb.model.AttributeValue;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 public class CitaRepository {
 
@@ -28,5 +30,13 @@ public class CitaRepository {
         values.put(":horaFinal", AttributeValue.builder().n("" + millisEnd).build());
         return BeverlyDynamoDB.getFirst("citas", "id = :id AND hora BETWEEN :horaInicial AND :horaFinal", values)
                 .map(valueMap -> new CitaMapper().map(valueMap));
+    }
+
+    public List<Cita> getAll() {
+        HashMap<String, AttributeValue> values = new HashMap<>();
+        values.put(":now", AttributeValue.builder().n("" + new DateTime().getMillis()).build());
+        return BeverlyDynamoDB.getAll("citas", "hora < :now", values)
+                .stream().map(valueMap -> new CitaMapper().map(valueMap))
+                .collect(Collectors.toList());
     }
 }

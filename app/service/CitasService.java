@@ -3,14 +3,18 @@ package service;
 import acl.BeverlySNS;
 import com.google.inject.Inject;
 import domain.Cita;
+import domain.Servicio;
 import play.libs.Json;
 import repository.CitaRepository;
 import sqs.events.CitaActualizada;
 import sqs.events.CitaCreada;
 import sqs.events.CitaEliminada;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class CitasService {
 
@@ -46,5 +50,22 @@ public class CitasService {
             BeverlySNS.send(Json.toJson(citaEliminada).toString());
             return cita;
         });
+    }
+    public Optional<Integer> findHowMany() {
+        List<Cita> all = repository.getAll();
+
+        return Optional.of(all.size());
+    }
+
+    public Optional<Long> findHowMuch() {
+        Stream<Cita> allStream = repository.getAll().stream();
+
+        Stream<Servicio> servicesStream = allStream.flatMap(cita1 -> cita1.getServicios().stream());
+
+        Stream<Long> longStream = servicesStream.map(Servicio::getValor).map(Long::valueOf);
+
+        Long reduce = longStream.reduce(0l, Long::sum);
+
+        return Optional.of(reduce);
     }
 }

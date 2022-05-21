@@ -51,6 +51,24 @@ public class CitasController extends Controller {
                 .orElse(unauthorized());
     }
 
+    public Result howMany(Http.Request request) {
+        return request.attrs().getOptional(BeverlyHttpReqAttrib.USER).map(user ->
+                        citasService.findHowMany().map(data ->
+                                ok(Json.toJson(getAuthorizedResponse(user, data)))
+                        ).orElse(notFound()))
+                .orElse(unauthorized());
+    }
+
+    public Result howMuch(Http.Request request) {
+        return request.attrs().getOptional(BeverlyHttpReqAttrib.USER).map(user ->
+                        citasService.findHowMuch().map(data ->
+                                ok(Json.toJson(getAuthorizedResponse(user, data)))
+                        ).orElse(notFound()))
+                .orElse(unauthorized());
+    }
+
+
+
     private HashMap getAuthorizedResponse(BeverlyHttpAuthObject user, Object data) {
         HashMap response = new HashMap();
         response.put("data", data);
